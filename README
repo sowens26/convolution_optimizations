@@ -1,0 +1,63 @@
+=======================================
+Optimizations of the Common Convolution
+Samuel L Owens
+==============
+This collection shows various stages along the optimization process using convolutions as an example
+
+Step 1: Basic Sequential Implementation : sequential_basic.cpp
+	this is the first functional build 
+	no attention is paid to optimizations
+	simply proves the solution is valid 
+
+Step 2: Optimized Sequential Implementation : sequential_opt.cpp
+	this is the first round of optimizations
+	remove any redundant instructions 
+	minimize variable initializations
+	merge for loops to minimize iteration instructions
+	target edge cases with optimized solution variants
+	this might look longer and more complicated but the output should be identical
+
+Step 3: Basic Multithreaded : multi_basic.cpp
+	this is the first attempt at a multithreaded solution
+	if possible take your sequential solution and parallelize it
+	openmp allows simple generic parallelizations without much effort
+	carve your solution into steps that dont rely on one another 
+	do each of those asynchronously with respect to the others
+	sometimes you will need to rework your solution to be more parallel
+	some things simply cannot be parallelized efficiently
+
+Step 4: Optimized Multithreaded : multi_opt_1.cpp
+	this is the first round of optimizations to the multithreaded solution
+	perhaps you've simply plugged in an omp instruction to your sequential with tweaking
+	perhaps you've come to a new solution with more parallelization
+	first repeat/revisit the optimizations of Step 2, you may have created some new redundancies
+		it is possible some of your optimizations may be detrimental to parallelization
+	now decide how large of chunks you should be working on,
+		perhaps you should carve your work up further
+		perhaps there are some memory access patterns in your solution
+			optimizing to those patterns may yield significant speed up
+		perhaps some things you are parallelizing are insignificant
+			starting a new thread takes time and that is time not spent on your computations
+		
+Step 5.1: CPU Architecture Targeting
+	this is the final step in optimizations on the CPU side
+	rework your solution to take advantage of AVX, SSE, SIMD, etc
+		find what instruction sets are available on your architecture
+		take advantage of the ones that might be helpful to you
+	sometimes this can be a simple process 
+	sometimes this can mean completely reworking your solution
+	this almost always gives significant performance improvements
+	using compiler optimizations can work well, often better than handwritten optimizations
+		g++/gcc : -O1, -O2, -O3 for increasing levels of optimization
+		be sure to verify the compiler does not optimize away things it believes are redundant
+		it will delete parts of your solution if it thinks they dont matter
+		it is more aggressive about this as you increase the level, 3 is the most aggressive
+
+step 5.2: GPU Acceleration
+	some problems benefit from gpu acceleration 
+	for these problems CUDA is a tremendous tool if you have an NVIDIA gpu
+	OPENCL is okay too 
+	MPI works if youre brave
+	each of these are different and have different optimization oportunities
+
+
