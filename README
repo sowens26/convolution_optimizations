@@ -36,7 +36,7 @@ Step 3: Basic Multithreaded : multi_basic.cpp
 	sometimes you will need to rework your solution to be more parallel
 	some things simply cannot be parallelized efficiently
 	:
-	this solution basically takes the optimized sequential solution and does it asynchronously
+	my solution basically takes the optimized sequential solution and does it asynchronously
 	this is a good example of OMP's ease of use,
 	create a new task for each step of the solution that can be done asynchronously
 	the core is treated as a single chunk
@@ -55,7 +55,7 @@ Step 4: Optimized Multithreaded : multi_opt_1.cpp
 		perhaps some things you are parallelizing are insignificant
 			starting a new thread takes time and that is time not spent on your computations
 	:
-	this optimizes upon the previously multithreaded solution
+	my solution optimizes upon the previously multithreaded solution
 	the core is the best remaining avenue for increased parallelism
 	carving the core into chunks is the best way to do this 
 	alternating threads in a cell by cell nature 
