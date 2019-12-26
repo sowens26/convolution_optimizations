@@ -8,6 +8,8 @@ Step 1: Basic Sequential Implementation : sequential_basic.cpp
 	this is the first functional build 
 	no attention is paid to optimizations
 	simply proves the solution is valid 
+	:
+	my solution is very basic, it should be understandable to most anyone familiar with c/c++
 
 Step 2: Optimized Sequential Implementation : sequential_opt.cpp
 	this is the first round of optimizations
@@ -16,6 +18,14 @@ Step 2: Optimized Sequential Implementation : sequential_opt.cpp
 	merge for loops to minimize iteration instructions
 	target edge cases with optimized solution variants
 	this might look longer and more complicated but the output should be identical
+	:
+	my solution becomes more complex
+	each edge case is given its own targeted function
+		this removes redundant if statements
+	for loops are collapsed where one of their dimensions was the same
+		this removes redundant iteration instructions
+	variables initializations are minimized 
+
 
 Step 3: Basic Multithreaded : multi_basic.cpp
 	this is the first attempt at a multithreaded solution
@@ -25,6 +35,12 @@ Step 3: Basic Multithreaded : multi_basic.cpp
 	do each of those asynchronously with respect to the others
 	sometimes you will need to rework your solution to be more parallel
 	some things simply cannot be parallelized efficiently
+	:
+	this solution basically takes the optimized sequential solution and does it asynchronously
+	this is a good example of OMP's ease of use,
+	create a new task for each step of the solution that can be done asynchronously
+	the core is treated as a single chunk
+
 
 Step 4: Optimized Multithreaded : multi_opt_1.cpp
 	this is the first round of optimizations to the multithreaded solution
@@ -38,6 +54,22 @@ Step 4: Optimized Multithreaded : multi_opt_1.cpp
 			optimizing to those patterns may yield significant speed up
 		perhaps some things you are parallelizing are insignificant
 			starting a new thread takes time and that is time not spent on your computations
+	:
+	this optimizes upon the previously multithreaded solution
+	the core is the best remaining avenue for increased parallelism
+	carving the core into chunks is the best way to do this 
+	alternating threads in a cell by cell nature 
+		where a cell from thread0 is directly next to a cell from thread1
+		you will lose benefits from cachelines being larger than cell values in terms of bytes
+		larger cachelines means each of the cores will read in a contiguous piece of memory
+		because of how arrays are typically allocated the values are going to be continuous
+		so each core is going to have multiple adjacent values in it's cache at a time
+	so we parallelize by chunks not by cells
+	it is recommended to carve the array vertically and horizontally
+	I have simply used OMP to carve it vertically, each thread will operate on 32 rows
+	this lines up reasonably well with the cache sizes on my cpu
+	I achieve aproximately ( N_CORESx ) speedup when allowing N_CORES cpu threads 
+
 		
 Step 5.1: CPU Architecture Targeting
 	this is the final step in optimizations on the CPU side
