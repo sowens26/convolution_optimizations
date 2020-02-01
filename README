@@ -65,7 +65,8 @@ Step 4: Optimized Multithreaded : multi_opt_1.cpp
 		because of how arrays are typically allocated the values are going to be continuous
 		so each core is going to have multiple adjacent values in it's cache at a time
 	so we parallelize by chunks not by cells
-	it is recommended to carve the array vertically and horizontally
+	it is recommended to carve the array vertically 
+		( and horizontally also only if a single row is larger than the cacheline on your system )
 	I have simply used OMP to carve it vertically, each thread will operate on 32 rows
 	this lines up reasonably well with the cache sizes on my cpu
 	I achieve aproximately ( N_CORESx ) speedup when allowing N_CORES cpu threads 
