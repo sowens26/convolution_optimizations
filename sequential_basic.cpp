@@ -68,7 +68,6 @@ int main(int nargs, char** args){
 	}
 	stop = std::chrono::system_clock::now();
 	elapsed = stop - start;
-
 	/*
 	//PRINT ARRAY
 	for(long long i=0; i<m; ++i){

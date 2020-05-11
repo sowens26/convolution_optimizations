@@ -130,13 +130,13 @@ int main(int nargs, char** args){
 	}
    }//end pragma
 	stopClock();
+	printf("m:%llu n:%llu k:%llu\nseconds:%lf\npixels:%lf\npixels/sec:%lf\n", m, n, k,elapsed.count(), pixels, pixels/elapsed.count());
 
 	/*
 	printArray(&in, &m, &n);
 	printf("==================\n");
 	printArray(&out, &m, &n);
 	*/
-	printf("m:%llu n:%llu k:%llu\nseconds:%lf\npixels:%lf\npixels/sec:%lf\n", m, n, k,elapsed.count(), pixels, pixels/elapsed.count());
 	exit(0);
 }
 void verifyArgs(int *nargs, char*** args, long long* m, long long* n, long long* k, double* pixels){
