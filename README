@@ -86,11 +86,44 @@ Step 5.1: CPU Architecture Targeting
 		it will delete parts of your solution if it thinks they dont matter
 		it is more aggressive about this as you increase the level, 3 is the most aggressive
 
-step 5.2: GPU Acceleration
+Step 5.2: GPU Acceleration
 	some problems benefit from gpu acceleration 
 	for these problems CUDA is a tremendous tool if you have an NVIDIA gpu
-	OPENCL is okay too 
-	MPI works if youre brave
-	each of these are different and have different optimization oportunities
+	OPENCL and MPI are reasonable alternatives if you do not have an NVIDIA gpu
+	I will be using CUDA in this collection
+	
+	the gpu implementations follow a somewhat counter intuitive pattern as far as speedup is concerned
+	in the CPU based implementations the more specific code with a specific function for each edge case is more
+	efficient because the time needed to check every individual cell's index for validity is more than the time needed
+	to initialize all of the threads needed, so doing a little extra work at the beginning to set up the threads pays off
+	
+	on the GPU only one CUDA kernel can be running at a time, but inside that kernel every thread in every block will be running simultaneously
+	because every thread is doing the exact same thing on data that may have different values but is structurally the same the kernel 
+	could be expected to finish running at the same speed regardless of the number of threads.
+
+	Because adding more threads to a kernel won't make that kernel slower and only one kernel can run at a time, we want to pack as much work
+	into each of our kernels as we can. And because we can expect the kernel to finish in approximately the amount of time needed to complete 
+	one of its threads, we can assume the if statement would add only the time needed to pass through it once rather than M*N times.
+	Only considering the time of one iteration of that if statement adds much less time than the time needed to initialize all of the individual kernels
+	for the more specific implementation.
+	So the basic implementation on the gpu is actually more efficient than the more complicated one because of the nature of how CUDA works.
+
+Step 5.2.1: gpu_basic.cu
+	this is the original sequential_basic implementation ported to run the GPU
+	the convolution function is ported to a CUDA kernel
+	we will use the amount of iteration limits from the for loops to specify the number of blocks and threads
+	each row will be a block, each column will be a thread
+	because every CUDA thread will run the same code block we use the thread and block index to find the cell index
+	we use the same 4 part if statement to check the validity of the indices for each convolution
+	we use the same multiplication scheme to acquire the new cell value
+
+Step 5.2.2 gpu_opt.cu
+	this is the optimized sequential implementation ported to run on the GPU
+	each of the individual convolution functions are ported to their own CUDA kernel
+	we will use the amount of iterations from the for loop to specify number of blocks and threads again
+	again each row is a block and each column is a thread
+	each of the CUDA kernels has a different offset applied to the index because the chunks are located in different places in the array
+	we use the same multiplication scheme from the individual convolution functions in their new CUDA kernels
+
 
 

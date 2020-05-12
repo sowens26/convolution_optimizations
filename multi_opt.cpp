@@ -1,5 +1,5 @@
 /*
- 	@author Samuel L Owens
+V 	@author Samuel L Owens
 	@title Convolutions: basic parallel
 	2d pixel convolutions 
 	K x K kernel applied to M x N pixel array

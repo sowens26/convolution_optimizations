@@ -36,14 +36,14 @@ int main(int nargs, char** args){
 	cudaMemcpy(arr, d_out, sizeof(float)*m*n, cudaMemcpyDeviceToHost);
 	cudaDeviceSynchronize();
 	stop_clock();
-	/*
+/*	
 	for (long long i=0; i<m; ++i){
 		for (long long j=0; j<n; ++j){
 			printf("%3lf ", arr[(i*n)+j]);
 		}
 		printf("\n");
 	}
-	*/
+*/
 	cudaFree(d_in); cudaFree(d_out); cudaFree(d_ck);
 	cudaFree(arr); cudaFree(ck);
 	return 0;
